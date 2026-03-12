@@ -1,0 +1,38 @@
+{
+	"nodes":[
+		{"id":"a8a8642514bfec84","x":-80,"y":80,"width":390,"height":418,"color":"6","type":"group","label":"论述"},
+		{"id":"c09ceac30ca38c7d","type":"group","x":460,"y":-140,"width":360,"height":380,"color":"4","label":"简答"},
+		{"id":"c899135c0c34254d","type":"group","x":-232,"y":-140,"width":852,"height":90,"color":"5","label":"名词解释"},
+		{"id":"2115eceb4cd3d843","type":"text","text":"actually","x":-20,"y":-120,"width":120,"height":50},
+		{"id":"8a689fb7071cba0a","type":"text","text":"when","x":-116,"y":-120,"width":96,"height":50},
+		{"id":"bf739fbcd44544ec","type":"text","text":"thing","x":-212,"y":-120,"width":96,"height":50},
+		{"id":"8fb01e00726709da","type":"text","text":"composed","x":100,"y":-120,"width":140,"height":50},
+		{"id":"8cf64a8519d61fb0","type":"text","text":"feature","x":240,"y":-120,"width":120,"height":50},
+		{"id":"c20183565e836520","type":"text","text":"means","x":360,"y":-120,"width":120,"height":50},
+		{"id":"0c6f2b455466fca1","type":"text","text":"position","x":477,"y":-120,"width":120,"height":50},
+		{"id":"d5cb0e8ceabd6736","type":"text","text":"context","x":483,"y":0,"width":108,"height":50},
+		{"id":"f23f9dabc29d33cf","type":"text","text":"1. begin with ... etc\n2. core followed ... differ from\n3. result usage limit","x":483,"y":50,"width":281,"height":110},
+		{"id":"1ef1468064c38496","type":"text","text":" example / conclusion / value  /but","x":483,"y":160,"width":301,"height":50},
+		{"id":"c7422d52af3a938d","type":"text","text":"1. oriented / key person / solved\n2. systematize / mark with\n3. correction / division\n4. modern fusion","x":-45,"y":163,"width":300,"height":145},
+		{"id":"fd23e17637f9c07a","type":"text","text":"horizontal comparison","x":-20,"y":308,"width":250,"height":60},
+		{"id":"68ff041e8ef540e5","type":"text","text":"china situation / both sides / etc / future","x":-60,"y":368,"width":350,"height":50},
+		{"id":"928302e2887c08a9","type":"text","text":"define / oblige / sublimation","x":-18,"y":418,"width":250,"height":60},
+		{"id":"5b4d9b09d0a9b525","type":"text","text":"cite  ","x":-44,"y":103,"width":79,"height":60},
+		{"id":"0f9b1575e414aaa8","x":-860,"y":280,"width":744,"height":520,"type":"file","file":"附件/-答题模版-.md"},
+		{"id":"5e506fa1e223de16","x":-274,"y":-600,"width":888,"height":340,"type":"file","file":"附件/-答题模版-.md"},
+		{"id":"96eb0474255dff9d","x":900,"y":-169,"width":1120,"height":439,"type":"file","file":"附件/-答题模版-.md"}
+	],
+	"edges":[
+		{"id":"8285f991ada618e7","fromNode":"0c6f2b455466fca1","fromSide":"bottom","toNode":"d5cb0e8ceabd6736","toSide":"top"},
+		{"id":"f0067e395be54764","fromNode":"8cf64a8519d61fb0","fromSide":"bottom","toNode":"5b4d9b09d0a9b525","toSide":"right"},
+		{"id":"7ece0052b1ed254a","fromNode":"0c6f2b455466fca1","fromSide":"bottom","toNode":"5b4d9b09d0a9b525","toSide":"right"},
+		{"id":"4e0dde4b43549007","fromNode":"8a689fb7071cba0a","fromSide":"bottom","toNode":"c7422d52af3a938d","toSide":"left"},
+		{"id":"0913db22c681ec67","fromNode":"c20183565e836520","fromSide":"bottom","toNode":"5b4d9b09d0a9b525","toSide":"right"},
+		{"id":"e0f7b5dd5905a3af","fromNode":"f23f9dabc29d33cf","fromSide":"left","toNode":"c7422d52af3a938d","toSide":"right"},
+		{"id":"bd59bccbf6552b4d","fromNode":"8fb01e00726709da","fromSide":"bottom","toNode":"f23f9dabc29d33cf","toSide":"left"},
+		{"id":"74c5ad90ad7874d2","fromNode":"c20183565e836520","fromSide":"bottom","toNode":"c7422d52af3a938d","toSide":"right"},
+		{"id":"bc5a0d3a6e133767","fromNode":"0f9b1575e414aaa8","fromSide":"right","toNode":"a8a8642514bfec84","toSide":"bottom"},
+		{"id":"63097bb44a46d9fd","fromNode":"c899135c0c34254d","fromSide":"top","toNode":"5e506fa1e223de16","toSide":"bottom"},
+		{"id":"164d0270cf0dfb31","fromNode":"96eb0474255dff9d","fromSide":"left","toNode":"c09ceac30ca38c7d","toSide":"right"}
+	]
+}

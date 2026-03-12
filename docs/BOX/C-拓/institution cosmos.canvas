@@ -1,0 +1,14 @@
+{
+	"nodes":[
+		{"id":"4988244aeaa0f152","type":"text","text":"**漆器**：  \n**强相关**。生产组织、使用等级、礼仪/官用属性都受制度调控。","x":-92,"y":-57,"width":250,"height":60},
+		{"id":"1a82e2310859d836","type":"file","file":"BOX/A-题/a2-工艺、病害与修复/🫟玺印.md","x":-167,"y":78,"width":85,"height":50},
+		{"id":"ecf322c769092129","x":32,"y":128,"width":126,"height":50,"type":"file","file":"BOX/A-题/a2-工艺、病害与修复/古墓葬.md"},
+		{"id":"14c7e051ebfa8bd0","type":"file","file":"BOX/A-题/a2-工艺、病害与修复/古钱币.md","x":-124,"y":178,"width":130,"height":52},
+		{"id":"49af778ce2967678","x":95,"y":230,"width":214,"height":114,"type":"file","file":"BOX/A-题/a2-工艺、病害与修复/皮革织绣纤维.md"},
+		{"id":"82ede774558d2f19","x":-124,"y":287,"width":203,"height":162,"type":"file","file":"BOX/A-题/a2-工艺、病害与修复/石质文物.md"},
+		{"id":"018f8261889447c4","x":109,"y":410,"width":354,"height":214,"type":"file","file":"BOX/A-题/a2-工艺、病害与修复/陶瓷科技考古.md"},
+		{"id":"91f81f71bab571eb","x":95,"y":-227,"width":268,"height":103,"type":"file","file":"BOX/A-题/a2-工艺、病害与修复/⚱️冶金考古.md"},
+		{"id":"15cd44b268d95617","x":-367,"y":368,"width":285,"height":128,"type":"file","file":"BOX/A-题/a2-工艺、病害与修复/石窟-壁画彩塑.md"}
+	],
+	"edges":[]
+}

@@ -1,0 +1,29 @@
+{
+	"nodes":[
+		{"id":"53aa98b4674b5610","type":"group","x":-362,"y":414,"width":766,"height":228,"label":"隋唐"},
+		{"id":"384c5569b7786909","type":"group","x":-362,"y":-91,"width":766,"height":192,"label":"夏商周"},
+		{"id":"c20147348dd60dc3","type":"group","x":-273,"y":977,"width":677,"height":217,"label":"明清"},
+		{"id":"998bec933578f5eb","type":"group","x":-362,"y":168,"width":766,"height":188,"label":"秦汉"},
+		{"id":"0aae0355e63d5de2","type":"group","x":-362,"y":-325,"width":766,"height":160,"label":"史前"},
+		{"id":"a8bdde183aa72ad6","type":"group","x":-273,"y":681,"width":677,"height":100,"label":"宋"},
+		{"id":"18b69f7241edbc55","type":"group","x":-273,"y":1113,"width":677,"height":100,"label":"民国"},
+		{"id":"9d2eee2312f92264","type":"group","x":-273,"y":826,"width":677,"height":100,"label":"元"},
+		{"id":"bdd5c88a0c77cbbd","type":"text","text":"穴居(洞穴-地穴)-半穴居-地面建筑\n长江流域巢居(可能是干栏的渊源)为主,\n黄河流域则横穴(窑洞)为主\n\n柱础-檐柱-榫卯-局势","x":-342,"y":-305,"width":427,"height":120},
+		{"id":"07ad668f7d9bea19","type":"text","text":"干栏 榫卯 祭祀建筑","x":134,"y":-275,"width":250,"height":60},
+		{"id":"26afe607bb94f7aa","type":"text","text":"二里头院落雏形\n天文知识完备\n阶层分化\n夯筑技术,土坯技术,榫卯普及\n存在奠基\n\n金属工具进步,夯土技术进步,\n版筑完全成熟(防御性城垣)\n台榭建筑","x":-342,"y":-71,"width":427,"height":152},
+		{"id":"5d4efb45caafa94f","type":"text","text":"城市形成 封建制 ","x":134,"y":-25,"width":250,"height":60},
+		{"id":"2fbf4e17e7604eb4","type":"text","text":"趋于内敛","x":-253,"y":702,"width":250,"height":60},
+		{"id":"497aa72d1631de4e","type":"text","text":"制度化 《营造法式》","x":134,"y":702,"width":250,"height":60},
+		{"id":"08da5304a1e52ea1","type":"text","text":"发展期-第一峰\n象天法地-物质与精神高度结合\n- 秦\n大都无城,统一融合\n- 汉\n长安国际都市\n地面木建构无存,画像砖佐证\n斗拱很多彩","x":-342,"y":188,"width":427,"height":148},
+		{"id":"7735dc453042caf6","type":"text","text":"制度萌芽","x":134,"y":202,"width":250,"height":60},
+		{"id":"e238b25b407e14f4","type":"text","text":"兴盛期-又一峰\n- 宗教鼎盛期,佛道两兴\n殿堂代替宝塔成为中心\n- 土木塔无存,多砖塔,晚期模仿木结构较多\n楼阁式,密檐式,单层塔\n- 经幢、石灯","x":-342,"y":434,"width":427,"height":182},
+		{"id":"38dc3ff3745ab40a","type":"text","text":"规划性 形制成熟 礼制定型","x":134,"y":485,"width":250,"height":60},
+		{"id":"e8be628c617029ca","type":"text","text":"园林兴盛","x":-253,"y":998,"width":250,"height":60},
+		{"id":"52021305436617ed","type":"text","text":"戏台 观星台","x":-253,"y":847,"width":250,"height":60},
+		{"id":"0867ee5ef8a16797","type":"text","text":"科学与娱乐的兴起","x":134,"y":847,"width":250,"height":60},
+		{"id":"897055612d996718","type":"text","text":"规范化 定型化 《工程做法》","x":134,"y":998,"width":250,"height":60},
+		{"id":"a5d8c7bb39c7390f","type":"text","text":"民族式建筑","x":-253,"y":1134,"width":250,"height":60},
+		{"id":"cb7d935a19e3d00d","type":"text","text":"中西融合","x":134,"y":1134,"width":250,"height":60}
+	],
+	"edges":[]
+}

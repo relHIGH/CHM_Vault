@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ page.title | default: "笔记" }} | CHM 知识库</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root { --primary: #2c3e50; --accent: #34495e; --bg: #f8f9fa; --text: #333; }
+    body { font-family: -apple-system, sans-serif; line-height: 1.8; color: var(--text); background: var(--bg); margin: 0; }
+    header { background: white; padding: 1rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+    .container { max-width: 850px; margin: 0 auto; padding: 0 1.5rem; }
+    nav { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+    nav a { color: var(--primary); text-decoration: none; font-weight: 600; padding: 0.4rem 0.8rem; font-size: 0.9rem; border-radius: 4px; }
+    nav a:hover { background: #eee; }
+    main { padding: 3rem 0; min-height: 60vh; }
+    h1 { font-size: 2.2rem; border-left: 6px solid var(--primary); padding-left: 1rem; margin-bottom: 2rem; color: var(--primary); }
+    h2, h3 { color: var(--primary); }
+    img { max-width: 100%; border-radius: 8px; }
+    footer { text-align: center; padding: 2rem 0; background: #eee; color: #777; font-size: 0.8rem; margin-top: 4rem; }
+  </style>
+</head>
+<body>
+  <header><div class="container"><nav>
+    <a href="{{ site.baseurl }}/">🏠 首页</a>
+    {% for p in site.pages %}{% if p.path contains "docs/" %}<a href="{{ p.url | relative_url }}">{{ p.name | remove: ".md" }}</a>{% endif %}{% endfor %}
+  </nav></div></header>
+  <main class="container">
+    {{ content }}
+  </main>
+  <footer><div class="container"><p>CHM 知识库 · 基于 GitHub Pages 构建</p></div></footer>
+</body>
+</html>
