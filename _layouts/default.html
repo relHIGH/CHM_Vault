@@ -26,23 +26,16 @@
     .container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; flex-grow: 1; }
     h1 { font-size: 2.2rem; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
     
-    /* Obsidian Callouts CSS 模拟 */
-    .callout { 
-      margin: 1.5rem 0; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #ccc; background: #fafafa;
-    }
-    .callout-title { font-weight: bold; display: flex; align-items: center; margin-bottom: 8px; font-size: 0.95rem; }
-    .callout-content { font-size: 0.9rem; }
+    /* 双链高亮样式 */
+    .wikilink { color: #1a73e8; text-decoration: none; border-bottom: 1px dashed #1a73e8; font-weight: 500; }
+    .wikilink:hover { background: #e8f0fe; border-bottom-style: solid; }
     
-    /* 不同类型的 Callouts 配色 */
+    .callout { margin: 1.5rem 0; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #ccc; background: #fafafa; }
+    .callout-title { font-weight: bold; display: flex; align-items: center; margin-bottom: 8px; font-size: 0.95rem; }
     .callout-info { border-left-color: #007bff; background: #eef7ff; }
-    .callout-info .callout-title { color: #007bff; }
     .callout-warning { border-left-color: #f0ad4e; background: #fffdf0; }
-    .callout-warning .callout-title { color: #f0ad4e; }
     .callout-error { border-left-color: #d9534f; background: #fff0f0; }
-    .callout-error .callout-title { color: #d9534f; }
     .callout-success { border-left-color: #5cb85c; background: #f0fff0; }
-    .callout-success .callout-title { color: #5cb85c; }
-    .callout-note { border-left-color: #777; background: #f9f9f9; }
 
     footer { padding: 2rem 0; border-top: 1px solid #eee; margin-top: 5rem; text-align: center; background: #fafafa; }
     .tag-item { background: #eee; color: #666; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; text-decoration: none; margin: 2px; display: inline-block; }
@@ -61,39 +54,103 @@
         <div style="margin-top: 2rem;">{{ content }}</div>
       </article>
     </main>
-    <footer><div class="container"><div style="color: #aaa; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px;">🏷️ 标签检索</div>{% assign all_tags = "" %}{% for p in site.pages %}{% if p.tags %}{% for t in p.tags %}{% unless all_tags contains t %}{% assign all_tags = all_tags | append: t | append: "," %}{% endunless %}{% endfor %}{% endif %}{% endfor %}{% assign tag_list = all_tags | split: "," | sort %}{% for t in tag_list %}{% if t != "" %}<span class="tag-item"># {{ t }}</span>{% endif %}{% endfor %}</div></footer>
+
+    <footer>
+      <div class="container">
+        <div style="color: #aaa; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px;">🏷️ 标签维度检索</div>
+        {% assign all_tags = "" %}
+        {% for p in site.pages %}{% if p.tags %}{% for t in p.tags %}
+          {% unless all_tags contains t %}{% assign all_tags = all_tags | append: t | append: "," %}{% endunless %}
+        {% endfor %}{% endif %}{% endfor %}
+        {% assign tag_list = all_tags | split: "," | sort %}
+        {% for t in tag_list %}{% if t != "" %}<span class="tag-item"># {{ t }}</span>{% endif %}{% endfor %}
+      </div>
+    </footer>
   </div>
 
   <script>
-    // 1. 侧边栏自动构树 (沿用之前的逻辑)
+    // 1. 侧边栏构树 (完全还原 Obsidian 逻辑)
     const pages = [{% for p in site.pages %}{% if p.path contains "docs/" %}{ "path": {{ p.path | jsonify }}, "url": {{ p.url | relative_url | jsonify }}, "name": {{ p.name | remove: ".md" | jsonify }} },{% endif %}{% endfor %}];
     const currentUrl = {{ page.url | relative_url | jsonify }};
-    function buildTree(pages) { const root = {}; pages.forEach(p => { const parts = p.path.split("/").slice(1); let current = root; parts.forEach((part, index) => { if (index === parts.length - 1) { current[part] = p; } else { if (!current[part]) current[part] = {}; current = current[part]; } }); }); return root; }
-    function renderTree(node, container) { Object.keys(node).sort().forEach(key => { const value = node[key]; if (value.url) { const a = document.createElement("a"); a.href = value.url; a.className = "tree-file" + (value.url === currentUrl ? " active" : ""); a.innerText = "📄 " + value.name; container.appendChild(a); } else { const folderDiv = document.createElement("div"); folderDiv.className = "tree-folder"; const header = document.createElement("div"); header.className = "folder-header"; header.innerText = key; const content = document.createElement("div"); content.className = "folder-content"; header.onclick = () => { header.classList.toggle("open"); content.classList.toggle("show"); }; folderDiv.appendChild(header); folderDiv.appendChild(content); container.appendChild(folderDiv); renderTree(value, content); if (content.querySelector(".active")) { header.classList.add("open"); content.classList.add("show"); } } }); }
-    const treeData = buildTree(pages);
-    renderTree(treeData, document.getElementById("tree-container"));
 
-    // 2. Obsidian Callouts 解析逻辑
-    document.querySelectorAll("blockquote").forEach(bq => {
-      const firstLine = bq.querySelector("p")?.innerText || bq.innerText;
-      const match = firstLine.match(/^\[!(INFO|WARNING|ERROR|SUCCESS|NOTE|TIP|IMPORTANT|QUESTION|CAUTION|TODO)\](.*)/i);
-      
+    function buildTree(pages) {
+      const root = {};
+      pages.forEach(p => {
+        const parts = p.path.split("/").slice(1);
+        let current = root;
+        parts.forEach((part, index) => {
+          if (index === parts.length - 1) {
+            current[part] = p;
+          } else {
+            if (!current[part]) current[part] = {};
+            current = current[part];
+          }
+        });
+      });
+      return root;
+    }
+
+    function renderTree(node, container) {
+      Object.keys(node).sort().forEach(key => {
+        const value = node[key];
+        if (value.url) {
+          const a = document.createElement("a");
+          a.href = value.url;
+          a.className = "tree-file" + (value.url === currentUrl ? " active" : "");
+          a.innerText = "📄 " + value.name;
+          container.appendChild(a);
+        } else {
+          const folderDiv = document.createElement("div");
+          folderDiv.className = "tree-folder";
+          const header = document.createElement("div");
+          header.className = "folder-header";
+          header.innerText = key;
+          const content = document.createElement("div");
+          content.className = "folder-content";
+          header.onclick = () => { header.classList.toggle("open"); content.classList.toggle("show"); };
+          folderDiv.appendChild(header);
+          folderDiv.appendChild(content);
+          container.appendChild(folderDiv);
+          renderTree(value, content);
+          if (content.querySelector(".active")) { header.classList.add("open"); content.classList.add("show"); }
+        }
+      });
+    }
+
+    renderTree(buildTree(pages), document.getElementById("tree-container"));
+
+    // 2. 双向链接 [[...]] 解析 & Callouts 解析
+    const article = document.getElementById("main-content");
+    
+    // 渲染 Callouts
+    article.querySelectorAll("blockquote").forEach(bq => {
+      const firstLine = bq.innerText.trim();
+      const match = firstLine.match(/^\[!(INFO|WARNING|ERROR|SUCCESS|SUMMARY|TIP|EXAMPLE|NOTE)\](.*)/i);
       if (match) {
         const type = match[1].toLowerCase();
-        const title = match[2].trim() || type.toUpperCase();
-        
+        const title = match[2].split("\n")[0].trim() || type.toUpperCase();
         bq.className = "callout callout-" + type;
         const titleDiv = document.createElement("div");
         titleDiv.className = "callout-title";
-        titleDiv.innerText = "ℹ️ " + title; // 可以根据 type 换不同图标
-        
-        // 移除原文中的 [!TYPE] 标记
-        if (bq.querySelector("p")) {
-          bq.querySelector("p").innerText = bq.querySelector("p").innerText.replace(/^\[!.*\]/i, "").replace(title, "").trim();
-        }
-        
+        titleDiv.innerText = "ℹ️ " + title;
+        bq.innerHTML = bq.innerHTML.replace(/\[!.*\]/i, "").replace(title, "");
         bq.insertBefore(titleDiv, bq.firstChild);
       }
+    });
+
+    // 解析双链 [[...]]
+    article.innerHTML = article.innerHTML.replace(/\[\[(.*?)\]\]/g, (match, linkContent) => {
+      // 处理 [[文件名|显示名]] 或 [[文件名#锚点|显示名]]
+      let [targetPart, label] = linkContent.split("|");
+      let [target, anchor] = targetPart.split("#");
+      
+      const found = pages.find(p => p.name === target.trim());
+      if (found) {
+        let finalUrl = found.url;
+        if (anchor) finalUrl += "#" + anchor.trim();
+        return `<a href="${finalUrl}" class="wikilink">${label || target}</a>`;
+      }
+      return `<span style="color: #888;">[[${linkContent}]]</span>`;
     });
   </script>
 </body>
