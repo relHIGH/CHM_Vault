@@ -1,4 +1,5 @@
 title: CHM 知识库
-description: 我的个人知识库
-baseurl: /chm-website
+description: 按照 Obsidian 文件夹结构生成的侧边栏知识库
+baseurl: /CHM_Vault
 url: https://relHIGH.github.io
+layout: default
