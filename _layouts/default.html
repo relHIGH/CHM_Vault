@@ -5,7 +5,7 @@
   <title>{{ page.name | remove: ".md" }} | CHM</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    :root { --sidebar-width: 260px; --primary: #2c3e50; --accent: #1a73e8; --bg: #ffffff; --folder-hover: #f0f2f5; }
+    :root { --sidebar-width: 260px; --primary: #2c3e50; --accent: #1a73e8; --bg: #ffffff; --folder-hover: #f0f2f5; --tag-color: #e67e22; }
     body { font-family: -apple-system, sans-serif; margin: 0; display: flex; height: 100vh; font-size: 14px; overflow: hidden; }
     
     #sidebar { width: var(--sidebar-width); background: #fdfdfd; border-right: 1px solid #eaecef; overflow-y: auto; padding: 1rem 0; flex-shrink: 0; display: flex; flex-direction: column; }
@@ -26,30 +26,22 @@
     .container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; flex-grow: 1; }
     h1 { font-size: 2.2rem; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
     
-    /* 悬浮控制台样式 */
-    .floating-nav { 
-      position: fixed; right: 30px; bottom: 30px; display: flex; flex-direction: column; gap: 10px; z-index: 2000;
-    }
-    .nav-btn {
-      width: 45px; height: 45px; background: white; border: 1px solid #ddd; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: 0.3s; color: var(--primary);
-    }
+    /* 悬浮控制台 */
+    .floating-nav { position: fixed; right: 30px; bottom: 30px; display: flex; flex-direction: column; gap: 10px; z-index: 2000; }
+    .nav-btn { width: 45px; height: 45px; background: white; border: 1px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: 0.3s; color: var(--primary); }
     .nav-btn:hover { background: var(--accent); color: white; border-color: var(--accent); transform: translateY(-3px); }
 
-    /* 双链高亮样式 */
+    /* 文本内标签醒目显示 */
+    .content-tag { color: var(--tag-color); font-weight: 600; text-decoration: none; padding: 1px 4px; border-radius: 4px; background: rgba(230, 126, 34, 0.1); transition: 0.2s; }
+    .content-tag:hover { background: var(--tag-color); color: white; }
+
     .wikilink { color: #1a73e8; text-decoration: none; border-bottom: 1px dashed #1a73e8; font-weight: 500; }
-    .wikilink:hover { background: #e8f0fe; border-bottom-style: solid; }
-    
     .callout { margin: 1.5rem 0; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #ccc; background: #fafafa; }
     .callout-title { font-weight: bold; display: flex; align-items: center; margin-bottom: 8px; font-size: 0.95rem; }
-    .callout-info { border-left-color: #007bff; background: #eef7ff; }
-    .callout-warning { border-left-color: #f0ad4e; background: #fffdf0; }
-    .callout-error { border-left-color: #d9534f; background: #fff0f0; }
-    .callout-success { border-left-color: #5cb85c; background: #f0fff0; }
 
     footer { padding: 2rem 0; border-top: 1px solid #eee; margin-top: 5rem; text-align: center; background: #fafafa; }
-    .tag-item { background: #eee; color: #666; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; text-decoration: none; margin: 2px; display: inline-block; }
+    .tag-item { background: #eee; color: #666; padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; text-decoration: none; margin: 4px; display: inline-block; transition: 0.2s; }
+    .tag-item:hover { background: var(--tag-color); color: white; }
   </style>
 </head>
 <body>
@@ -59,7 +51,6 @@
   </aside>
 
   <div id="content-wrapper">
-    <!-- 悬浮导航按钮 -->
     <div class="floating-nav">
       <div class="nav-btn" onclick="window.history.back()" title="返回上一页">🔙</div>
       <div class="nav-btn" onclick="document.getElementById('content-wrapper').scrollTo({top:0, behavior:'smooth'})" title="回到顶部">⬆️</div>
@@ -68,45 +59,56 @@
     <main class="container">
       <article id="main-content">
         <h1>{{ page.name | remove: ".md" }}</h1>
-        <div style="margin-top: 2rem;">{{ content }}</div>
+        <div id="page-content-area" style="margin-top: 2rem;">{{ content }}</div>
       </article>
     </main>
 
     <footer>
       <div class="container">
-        <div style="color: #aaa; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px;">🏷️ 标签维度检索</div>
-        {% assign all_tags = "" %}
-        {% for p in site.pages %}{% if p.tags %}{% for t in p.tags %}
-          {% unless all_tags contains t %}{% assign all_tags = all_tags | append: t | append: "," %}{% endunless %}
-        {% endfor %}{% endif %}{% endfor %}
-        {% assign tag_list = all_tags | split: "," | sort %}
-        {% for t in tag_list %}{% if t != "" %}<span class="tag-item"># {{ t }}</span>{% endif %}{% endfor %}
+        <div style="color: #aaa; font-size: 0.75rem; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px;">🏷️ 标签维度索引</div>
+        <div id="footer-tags">
+          {% assign blacklist = "名词解释,论述,简答,文物学概论,中国考古通论" | split: "," %}
+          {% assign all_tags = "" %}
+          {% for p in site.pages %}
+            {% if p.tags %}
+              {% for t in p.tags %}
+                {% unless blacklist contains t %}
+                  {% unless all_tags contains t %}
+                    {% assign all_tags = all_tags | append: t | append: "," %}
+                  {% endunless %}
+                {% endunless %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+          {% assign tag_list = all_tags | split: "," | sort %}
+          {% for t in tag_list %}
+            {% if t != "" %}
+              <a href="{{ site.baseurl }}/tags.html?tag={{ t }}" class="tag-item"># {{ t }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </footer>
   </div>
 
   <script>
-    // 1. 侧边栏构树 (完全还原 Obsidian 逻辑)
-    const pages = [{% for p in site.pages %}{% if p.path contains "docs/" %}{ "path": {{ p.path | jsonify }}, "url": {{ p.url | relative_url | jsonify }}, "name": {{ p.name | remove: ".md" | jsonify }} },{% endif %}{% endfor %}];
+    // 1. 数据准备
+    const pages = [{% for p in site.pages %}{% if p.path contains "docs/" %}{ "path": {{ p.path | jsonify }}, "url": {{ p.url | relative_url | jsonify }}, "name": {{ p.name | remove: ".md" | jsonify }}, "tags": {{ p.tags | jsonify }} },{% endif %}{% endfor %}];
     const currentUrl = {{ page.url | relative_url | jsonify }};
 
+    // 2. 侧边栏构树
     function buildTree(pages) {
       const root = {};
       pages.forEach(p => {
         const parts = p.path.split("/").slice(1);
         let current = root;
         parts.forEach((part, index) => {
-          if (index === parts.length - 1) {
-            current[part] = p;
-          } else {
-            if (!current[part]) current[part] = {};
-            current = current[part];
-          }
+          if (index === parts.length - 1) { current[part] = p; } 
+          else { if (!current[part]) current[part] = {}; current = current[part]; }
         });
       });
       return root;
     }
-
     function renderTree(node, container) {
       Object.keys(node).sort().forEach(key => {
         const value = node[key];
@@ -133,14 +135,33 @@
         }
       });
     }
-
     renderTree(buildTree(pages), document.getElementById("tree-container"));
 
-    // 2. 双向链接 [[...]] 解析 & Callouts 解析
-    const article = document.getElementById("main-content");
+    // 3. 正文解析 (标签醒目显示 + 双链 + Callouts)
+    const contentArea = document.getElementById("page-content-area");
     
+    // 解析 #标签
+    const blacklist = ["名词解释", "论述", "简答", "文物学概论", "中国考古通论"];
+    contentArea.innerHTML = contentArea.innerHTML.replace(/#([\u4e00-\u9fa5\w]+)/g, (match, tagName) => {
+      if (blacklist.includes(tagName)) return match;
+      return `<a href="{{ site.baseurl }}/tags.html?tag=${tagName}" class="content-tag">#${tagName}</a>`;
+    });
+
+    // 解析 [[双链]]
+    contentArea.innerHTML = contentArea.innerHTML.replace(/\[\[(.*?)\]\]/g, (match, linkContent) => {
+      let [targetPart, label] = linkContent.split("|");
+      let [target, anchor] = targetPart.split("#");
+      const found = pages.find(p => p.name === target.trim());
+      if (found) {
+        let finalUrl = found.url;
+        if (anchor) finalUrl += "#" + anchor.trim();
+        return `<a href="${finalUrl}" class="wikilink">${label || target}</a>`;
+      }
+      return `<span style="color: #888;">[[${linkContent}]]</span>`;
+    });
+
     // 渲染 Callouts
-    article.querySelectorAll("blockquote").forEach(bq => {
+    document.querySelectorAll("blockquote").forEach(bq => {
       const firstLine = bq.innerText.trim();
       const match = firstLine.match(/^\[!(INFO|WARNING|ERROR|SUCCESS|SUMMARY|TIP|EXAMPLE|NOTE)\](.*)/i);
       if (match) {
@@ -153,19 +174,6 @@
         bq.innerHTML = bq.innerHTML.replace(/\[!.*\]/i, "").replace(title, "");
         bq.insertBefore(titleDiv, bq.firstChild);
       }
-    });
-
-    // 解析双链 [[...]]
-    article.innerHTML = article.innerHTML.replace(/\[\[(.*?)\]\]/g, (match, linkContent) => {
-      let [targetPart, label] = linkContent.split("|");
-      let [target, anchor] = targetPart.split("#");
-      const found = pages.find(p => p.name === target.trim());
-      if (found) {
-        let finalUrl = found.url;
-        if (anchor) finalUrl += "#" + anchor.trim();
-        return `<a href="${finalUrl}" class="wikilink">${label || target}</a>`;
-      }
-      return `<span style="color: #888;">[[${linkContent}]]</span>`;
     });
   </script>
 </body>
