@@ -8,30 +8,23 @@
     :root { --sidebar-width: 250px; --primary: #2c3e50; --accent: #1a73e8; --bg: #ffffff; }
     body { font-family: -apple-system, sans-serif; margin: 0; display: flex; height: 100vh; font-size: 13px; }
     
-    /* 侧栏：支持深度解析物理目录 */
-    #sidebar { 
-      width: var(--sidebar-width); background: #fdfdfd; border-right: 1px solid #eaecef; 
-      overflow-y: auto; padding: 1.5rem 0; flex-shrink: 0; 
-    }
+    #sidebar { width: var(--sidebar-width); background: #fdfdfd; border-right: 1px solid #eaecef; overflow-y: auto; padding: 1.5rem 0; flex-shrink: 0; }
     .folder-label { 
       padding: 6px 15px 2px; color: #888; font-weight: bold; font-size: 0.75rem; 
-      text-transform: uppercase; letter-spacing: 0.5px;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px;
     }
-    .sub-label { color: #aaa; font-size: 0.7rem; display: block; padding: 2px 15px; }
+    .sub-folder { color: #aaa; font-size: 0.7rem; padding: 2px 15px; font-weight: 500; }
     
-    .nav-link { 
-      display: block; padding: 3px 15px; text-decoration: none; color: #555; 
-      border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; 
-    }
+    .nav-link { display: block; padding: 3px 15px; text-decoration: none; color: #555; border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .nav-link:hover { background: #f0f2f5; color: var(--primary); }
     .nav-link.active { background: #e8f0fe; color: var(--accent); font-weight: 500; }
     
-    /* 递归缩进系统 (根据深度自动生成) */
-    .indent-0 { padding-left: 15px; font-weight: bold; border-bottom: 1px solid #eee; margin-top: 10px; color: #999; }
-    .indent-1 { padding-left: 25px; color: #666; font-weight: 500; }
-    .indent-2 { padding-left: 40px; }
-    .indent-3 { padding-left: 55px; }
-    .indent-4 { padding-left: 70px; }
+    /* 物理层级缩进 */
+    .indent-0 { padding-left: 15px; }
+    .indent-1 { padding-left: 25px; }
+    .indent-2 { padding-left: 35px; }
+    .indent-3 { padding-left: 45px; }
+    .indent-4 { padding-left: 55px; }
 
     #content-wrapper { flex-grow: 1; overflow-y: auto; background: var(--bg); display: flex; flex-direction: column; }
     .container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; flex-grow: 1; }
@@ -45,25 +38,28 @@
     <a href="{{ site.baseurl }}/" style="font-weight: bold; padding: 10px 15px; display: block; color: var(--primary); text-decoration: none; font-size: 1.1rem; border-bottom: 1px solid #eee; margin-bottom: 1rem;">CHM Vault</a>
     
     {% assign sorted_pages = site.pages | sort: "path" %}
-    {% assign last_path = "" %}
+    {% assign current_hierarchy = "" %}
 
     {% for p in sorted_pages %}
       {% if p.path contains "docs/" %}
         {% assign parts = p.path | split: "/" %}
         
-        <!-- 自动识别文件夹层级变动 (无论多少层) -->
+        <!-- 构建并检查每一层文件夹 -->
+        {% assign folder_path = "" %}
         {% for i in (1..parts.size) %}
           {% assign idx = i | minus: 1 %}
           {% if idx > 0 and idx < parts.size | minus: 1 %}
-            {% assign current_folder = parts[idx] %}
-            {% unless last_path contains current_folder %}
-              <div class="folder-label indent-{{ idx | minus: 1 }}">📁 {{ current_folder }}</div>
+            {% assign folder_name = parts[idx] %}
+            {% assign folder_path = folder_path | append: folder_name | append: "/" %}
+            
+            {% unless current_hierarchy contains folder_path %}
+              <div class="folder-label indent-{{ idx | minus: 1 }}">📁 {{ folder_name }}</div>
+              {% assign current_hierarchy = current_hierarchy | append: folder_path | append: "|" %}
             {% endunless %}
           {% endif %}
         {% endfor %}
-        {% assign last_path = p.path %}
 
-        <!-- 显示文件：根据实际物理深度缩进 -->
+        <!-- 显示文件链接 -->
         {% assign file_depth = parts.size | minus: 2 %}
         <a href="{{ p.url | relative_url }}" class="nav-link indent-{{ file_depth }} {% if page.url == p.url %}active{% endif %}">
           📄 {{ p.name | remove: ".md" }}
