@@ -5,28 +5,11 @@
   <title>{{ page.name | remove: ".md" }} | CHM</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    :root { 
-      --sidebar-width: 260px; 
-      --primary: #2c3e50; 
-      --accent: #1a73e8; 
-      --bg: #ffffff; 
-      --tag-color: #e67e22;
-      --text-main: #2c3e50;
-      --border-color: #eee;
-    }
+    :root { --sidebar-width: 260px; --primary: #2c3e50; --accent: #1a73e8; --bg: #ffffff; --tag-color: #e67e22; --text-main: #2c3e50; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; margin: 0; display: flex; height: 100vh; font-size: 16px; line-height: 1.8; color: var(--text-main); background: var(--bg); overflow: hidden; }
     
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
-      margin: 0; display: flex; height: 100vh; font-size: 16px; line-height: 1.8; color: var(--text-main); 
-      background: var(--bg); overflow: hidden;
-    }
-
-    /* 侧边栏优化：更细致的字体与间距 */
-    #sidebar { 
-      width: var(--sidebar-width); background: #fdfdfd; border-right: 1px solid #eaecef; 
-      overflow-y: auto; padding: 1rem 0; flex-shrink: 0; display: flex; flex-direction: column; font-size: 14px;
-    }
-    .sidebar-header { padding: 0 20px 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1rem; }
+    #sidebar { width: var(--sidebar-width); background: #fdfdfd; border-right: 1px solid #eaecef; overflow-y: auto; padding: 1rem 0; flex-shrink: 0; display: flex; flex-direction: column; font-size: 14px; }
+    .sidebar-header { padding: 0 20px 1rem; border-bottom: 1px solid #eee; margin-bottom: 1rem; }
     .sidebar-header a { font-weight: bold; color: var(--primary); text-decoration: none; font-size: 1.2rem; }
     #tree-container { padding: 0 10px; }
     .folder-header { cursor: pointer; display: flex; align-items: center; padding: 6px 10px; border-radius: 4px; color: #555; transition: 0.2s; }
@@ -39,27 +22,15 @@
     .tree-file:hover { background: #f0f2f5; color: var(--accent); }
     .tree-file.active { background: #e8f0fe; color: var(--accent); font-weight: 600; }
 
-    /* 主内容区：Obsidian 风格排版 */
     #content-wrapper { flex-grow: 1; overflow-y: auto; background: var(--bg); display: flex; flex-direction: column; }
     .container { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; width: 100%; box-sizing: border-box; }
-    
-    /* 解决标题重复：隐藏自动生成的 H1，如果正文里已经有了 */
-    .page-title { font-size: 2.5rem; margin-bottom: 2rem; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
-    
-    /* Markdown 元素美化 */
     #markdown-body h1, #markdown-body h2, #markdown-body h3 { color: var(--primary); margin-top: 2.5rem; margin-bottom: 1.2rem; }
     #markdown-body p { margin-bottom: 1.5rem; text-align: justify; }
-    #markdown-body ul, #markdown-body ol { margin-bottom: 1.5rem; padding-left: 2rem; }
-    #markdown-body li { margin-bottom: 0.5rem; }
-    #markdown-body img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin: 2rem 0; }
     #markdown-body blockquote { border-left: 4px solid #ddd; padding: 1rem 1.5rem; color: #666; background: #fafafa; margin: 1.5rem 0; }
     
-    /* 标签与链接 */
     .content-tag { color: var(--tag-color); font-weight: 600; text-decoration: none; padding: 2px 8px; border-radius: 15px; background: rgba(230, 126, 34, 0.1); font-size: 0.85em; margin: 0 2px; }
     .wikilink { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); }
-    .wikilink:hover { background: #e8f0fe; border-bottom-style: solid; }
-
-    /* 悬浮控制台 */
+    
     .floating-nav { position: fixed; right: 30px; bottom: 30px; display: flex; flex-direction: column; gap: 12px; }
     .nav-btn { width: 45px; height: 45px; background: white; border: 1px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s; }
     .nav-btn:hover { background: var(--accent); color: white; transform: translateY(-3px); }
@@ -70,68 +41,45 @@
   </style>
 </head>
 <body>
-  <aside id="sidebar">
-    <div class="sidebar-header"><a href="{{ site.baseurl }}/">CHM Vault</a></div>
-    <div id="tree-container"></div>
-  </aside>
-
+  <aside id="sidebar"><div class="sidebar-header"><a href="{{ site.baseurl }}/">CHM Vault</a></div><div id="tree-container"></div></aside>
   <div id="content-wrapper">
-    <div class="floating-nav">
-      <div class="nav-btn" onclick="window.history.back()" title="返回">🔙</div>
-      <div class="nav-btn" onclick="document.getElementById('content-wrapper').scrollTo({top:0, behavior:'smooth'})" title="置顶">⬆️</div>
-    </div>
-
-    <main class="container">
-      <div id="markdown-body">
-        {{ content }}
-      </div>
-    </main>
-
-    <footer>
-      <div class="container">
-        <div style="color: #999; font-size: 0.8rem; font-weight: bold; margin-bottom: 15px; text-transform: uppercase;">🏷️ 标签分类索引</div>
-        <div id="footer-tags">
-          {% assign blacklist = "名词解释,论述,简答,文物学概论,中国考古通论" | split: "," %}
-          {% assign all_tags = "" %}
-          {% for p in site.pages %}{% if p.tags %}{% for t in p.tags %}
-            {% unless blacklist contains t %}{% unless all_tags contains t %}{% assign all_tags = all_tags | append: t | append: "," %}{% endunless %}{% endunless %}
-          {% endfor %}{% endif %}{% endfor %}
-          {% assign tag_list = all_tags | split: "," | sort %}
-          {% for t in tag_list %}{% if t != "" %}
-            <a href="{{ site.baseurl }}/tags.html?tag={{ t }}" class="tag-item"># {{ t }}</a>
-          {% endif %}{% endfor %}
-        </div>
-      </div>
-    </footer>
+    <div class="floating-nav"><div class="nav-btn" onclick="window.history.back()">🔙</div><div class="nav-btn" onclick="document.getElementById('content-wrapper').scrollTo({top:0, behavior:'smooth'})">⬆️</div></div>
+    <main class="container"><div id="markdown-body">{{ content }}</div></main>
+    <footer><div class="container"><div style="color: #999; font-size: 0.8rem; font-weight: bold; margin-bottom: 15px;">🏷️ 标签分类索引</div><div id="footer-tags">
+      {% assign blacklist = "名词解释,论述,简答,文物学概论,中国考古通论" | split: "," %}
+      {% assign all_tags = "" %}
+      {% for p in site.pages %}{% if p.tags %}{% for t in p.tags %}{% unless blacklist contains t %}{% unless all_tags contains t %}{% assign all_tags = all_tags | append: t | append: "," %}{% endunless %}{% endunless %}{% endfor %}{% endif %}{% endfor %}
+      {% assign tag_list = all_tags | split: "," | sort %}
+      {% for t in tag_list %}{% if t != "" %}<a href="{{ site.baseurl }}/tags.html?tag={{ t }}" class="tag-item"># {{ t }}</a>{% endif %}{% endfor %}
+    </div></div></footer>
   </div>
 
   <script>
-    // 1. 侧边栏构树 (JS 模式)
+    // 1. 侧边栏
     const pages = [{% for p in site.pages %}{% if p.path contains "docs/" %}{ "path": {{ p.path | jsonify }}, "url": {{ p.url | relative_url | jsonify }}, "name": {{ p.name | remove: ".md" | jsonify }} },{% endif %}{% endfor %}];
     const currentUrl = {{ page.url | relative_url | jsonify }};
     function buildTree(pages) { const root = {}; pages.forEach(p => { const parts = p.path.split("/").slice(1); let current = root; parts.forEach((part, index) => { if (index === parts.length - 1) { current[part] = p; } else { if (!current[part]) current[part] = {}; current = current[part]; } }); }); return root; }
     function renderTree(node, container) { Object.keys(node).sort().forEach(key => { const value = node[key]; if (value.url) { const a = document.createElement("a"); a.href = value.url; a.className = "tree-file" + (value.url === currentUrl ? " active" : ""); a.innerText = "📄 " + value.name; container.appendChild(a); } else { const folderDiv = document.createElement("div"); folderDiv.className = "tree-folder"; const header = document.createElement("div"); header.className = "folder-header"; header.innerText = key; const content = document.createElement("div"); content.className = "folder-content"; header.onclick = () => { header.classList.toggle("open"); content.classList.toggle("show"); }; folderDiv.appendChild(header); folderDiv.appendChild(content); container.appendChild(folderDiv); renderTree(value, content); if (content.querySelector(".active")) { header.classList.add("open"); content.classList.add("show"); } } }); }
     renderTree(buildTree(pages), document.getElementById("tree-container"));
 
-    // 2. 增强版正文解析 (只针对特定字符进行安全替换)
+    // 2. 精准正文解析
     const mdBody = document.getElementById("markdown-body");
     const blacklist = ["名词解释", "论述", "简答", "文物学概论", "中国考古通论"];
     
-    // 正则：精准匹配 #标签 和 [[双链]]
+    // 关键修复：使用 (^|\s)# 匹配，且排除纯数字
     mdBody.innerHTML = mdBody.innerHTML
-      .replace(/#([\u4e00-\u9fa5\w\/]+)/g, (match, tag) => {
-        if (blacklist.includes(tag)) return match;
-        return `<a href="{{ site.baseurl }}/tags.html?tag=${encodeURIComponent(tag)}" class="content-tag">#${tag}</a>`;
+      .replace(/(^|\s)#([\u4e00-\u9fa5\w\/]+)(?=\s|$)/g, (match, prefix, tag) => {
+        if (blacklist.includes(tag) || /^\d+$/.test(tag)) return match;
+        return `${prefix}<a href="{{ site.baseurl }}/tags.html?tag=${encodeURIComponent(tag)}" class="content-tag">#${tag}</a>`;
       })
       .replace(/\[\[(.*?)\]\]/g, (match, link) => {
-        let [t, l] = link.split("|");
-        let [target, anchor] = t.split("#");
+        let [t, l] = link.split("|"); let [target, anchor] = t.split("#");
         const found = pages.find(p => p.name === target.trim());
         if (found) return `<a href="${found.url}${anchor ? '#' + anchor : ''}" class="wikilink">${l || target}</a>`;
         return `<span style="color: #999;">[[${link}]]</span>`;
       });
 
-    // 3. Obsidian Callouts 模拟
+    // 3. Callouts
     document.querySelectorAll("blockquote").forEach(bq => {
       const match = bq.innerText.trim().match(/^\[!(.*?)\](.*)/);
       if (match) {
